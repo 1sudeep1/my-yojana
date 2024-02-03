@@ -1,10 +1,9 @@
 'use client'
 const { NextUIProvider } = require("@nextui-org/react")
-
-const Provider=({children})=>{
-    return(
+const Provider = ({ children }) => {
+    return (
         <NextUIProvider>
-            {children}
+                {children}
         </NextUIProvider>
     )
 }
