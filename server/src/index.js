@@ -1,6 +1,3 @@
-//importing mongoose
-const mongoose= require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/yojana-DB')
 //importing database connection
 const connect= require('./database/connect')
 connect()
@@ -13,11 +10,20 @@ require('dotenv').config()
 
 const port=process.env.PORT
 
+
+//it fetches data which is defined at body. express.json should must be above the route
+app.use(express.json())
+
 //importing routes
 const userRouter= require('./routes/users')
 
 //using routes
 app.use(userRouter)
+
+
+//importing cors
+const cors= require('cors')
+app.use(cors())
 
 //listening the port
 app.listen(port, ()=>{

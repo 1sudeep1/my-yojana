@@ -1,7 +1,8 @@
+const {registerNewUser} = require('../controllers/users')
 const express= require('express')
 const router= express.Router()
-const {hello}= require('../controllers/users')
 
-router.get('/', hello)
+
+router.post('/register', registerNewUser)
 
 module.exports= router
