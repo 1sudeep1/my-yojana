@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
+import Link from "next/link";
 import Image from "next/image";
 const page = () => {
     return (
