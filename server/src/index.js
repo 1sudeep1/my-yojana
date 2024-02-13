@@ -6,6 +6,10 @@ connect()
 const express= require('express')
 const app= express()
 
+//importing cors
+const cors= require('cors')
+app.use(cors())
+
 require('dotenv').config()
 
 const port=process.env.PORT
@@ -20,10 +24,6 @@ const userRouter= require('./routes/users')
 //using routes
 app.use(userRouter)
 
-
-//importing cors
-const cors= require('cors')
-app.use(cors())
 
 //listening the port
 app.listen(port, ()=>{
