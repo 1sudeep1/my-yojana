@@ -6,7 +6,7 @@ const page = () => {
     return (
         <>
             <Navbar>
-                <NavbarBrand>
+                <NavbarBrand as={Link} href='/'>
                 <Image src="/yojana-logo.png" width={110} height={110} />
                 </NavbarBrand>
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -27,11 +27,11 @@ const page = () => {
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent justify="end">
-                    <NavbarItem className="hidden lg:flex">
-                        <Link href="#">Login</Link>
-                    </NavbarItem>
+                <Button as={Link} color="primary" href="/login" variant="flat">
+                            Login
+                        </Button>
                     <NavbarItem>
-                        <Button as={Link} color="primary" href="#" variant="flat">
+                        <Button as={Link} color="primary" href="/register" variant="flat">
                             Sign Up
                         </Button>
                     </NavbarItem>
