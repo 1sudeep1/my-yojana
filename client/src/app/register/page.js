@@ -50,7 +50,7 @@ const Register = () => {
     const handleRegister = async(inputFields)=>{
   
         try{
-        const res= await axios.post(`http://localhost:4000/register`, inputFields)
+        const res= await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/register`, inputFields)
           const data = await res.data
     
           toast( data.msg,
