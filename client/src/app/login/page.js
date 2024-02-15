@@ -4,6 +4,9 @@ import * as Yup from 'yup';
 import FormSection from '../components/formSection/page'
 import {Input, Button } from "@nextui-org/react";
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -17,6 +20,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = () => {
+    const router= useRouter()
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -27,8 +31,32 @@ const Login = () => {
 
         onSubmit: values => {
             console.log(values)
+            handleLogin(values)
         }
     })
+
+    const handleLogin= async(inputItem)=>{
+        try{
+            const res= await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, inputItem)
+            const data= await res.data
+              toast( data.msg,
+                  {
+                    icon: data.check? '✅' : '❌',
+                    style: {
+                      borderRadius: '10px',
+                      background: '#333',
+                      color: '#fff',
+                    },
+                  }
+                );
+
+                if(data.check){
+                    router.push('/')
+                }
+        }catch(err){
+            console.log(err)
+        }        
+    }
 
     return (
         <FormSection>

@@ -33,17 +33,17 @@ const loginUser = async (req, res) => {
       const passwordMatched = await bcrypt.compare(req.body.password, userDetails.password)
 
       if(passwordMatched){
-          res.json({msg: 'login successfull'})
+          res.json({msg: 'login successful', check:true})
       }else{
-        res.json({msg:'incorrect password'})
+        res.json({msg:'incorrect password', check:false})
       }
 
     }else{
-      res.json({msg:'email not found'})
+      res.json({msg:'email not found', check:false})
     }
   } catch (err) {
     console.log(err)
-    res.json({msg:'login failed'})
+    res.json({msg:'login failed', check:false})
   }
 }
 
