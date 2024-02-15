@@ -1,7 +1,7 @@
 'use client'
 import React , {useState} from 'react';
 import * as Yup from 'yup';
-import toast from 'react-hot-toast';
+import toast from 'react-hot-toast'; //toast can use any where in any page but toaster should be used in provider
 import { useRouter } from 'next/navigation';
 import FormSection from '../components/formSection/page'
 import { CiMail } from "react-icons/ci";
@@ -50,7 +50,6 @@ const Register = () => {
     const handleRegister = async(inputFields)=>{
   
         try{
-
         const res= await axios.post(`http://localhost:4000/register`, inputFields)
           const data = await res.data
     
