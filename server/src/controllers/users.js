@@ -1,6 +1,8 @@
 const User = require("../models/user")
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const jwt= require('jsonwebtoken')
+
 const registerNewUser = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email: req.body.email })
@@ -33,7 +35,12 @@ const loginUser = async (req, res) => {
       const passwordMatched = await bcrypt.compare(req.body.password, userDetails.password)
 
       if(passwordMatched){
-          res.json({msg: 'login successful', check:true})
+        const token=jwt.sign(
+          {email:userDetails.email},
+          process?.env.SECRET_KEY
+        )
+        console.log(token)
+          res.json({msg: 'login successful', check:true, token, userDetails})
       }else{
         res.json({msg:'incorrect password', check:false})
       }
