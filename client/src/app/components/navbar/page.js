@@ -4,7 +4,6 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, DropdownItem, D
 import Link from "next/link";
 import Image from "next/image";
 const page = () => {
-    
     return (
         <>
             <Navbar>

@@ -9,14 +9,14 @@ const registerNewUser = async (req, res) => {
     //if user email already exist, return 403, else create User doc
     if (existingUser) {
       return res.status(403).json({
-        msg: "User already exist"
+        msg: "User already exist", check:false
       })
     } else {
       const hashPassword = await bcrypt.hash(req.body.password, saltRounds)
       req.body.password = hashPassword
       await User.create(req.body)
       res.json({
-        msg: "registered successfully"
+        msg: "registered successfully", check:true
       })
     }
   } catch (err) {
@@ -39,7 +39,6 @@ const loginUser = async (req, res) => {
           {email:userDetails.email},
           process?.env.SECRET_KEY
         )
-        console.log(token)
           res.json({msg: 'login successful', check:true, token, userDetails})
       }else{
         res.json({msg:'incorrect password', check:false})

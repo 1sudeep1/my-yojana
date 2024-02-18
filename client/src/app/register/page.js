@@ -55,7 +55,7 @@ const Register = () => {
     
           toast( data.msg,
               {
-                icon: res.status == 200 ? '✅' : '❌',
+                icon: data.check? '✅' : '❌',
                 style: {
                   borderRadius: '10px',
                   background: '#333',
@@ -63,7 +63,7 @@ const Register = () => {
                 },
               }
             );
-            if(res.status == 200) router.push('/login')
+            if(data.check) router.push('/login')
         }catch(err){
           console.log(err)
         }

@@ -7,6 +7,8 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import {loginUser} from '../redux/reducerSlices/userSlice'
+import { useDispatch } from 'react-redux';
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -20,6 +22,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = () => {
+    const dispatch= useDispatch()
     const router= useRouter()
     const formik = useFormik({
         initialValues: {
@@ -51,7 +54,9 @@ const Login = () => {
                 );
 
                 if(data.check){
+                    dispatch(loginUser(data));
                     router.push('/')
+
                 }
         }catch(err){
             console.log(err)
