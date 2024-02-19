@@ -33,7 +33,7 @@ const Profile = () => {
                             <span className="font-medium">Email:</span> {email}
                         </p>
                         <p>
-                            <span className="font-medium">Organization Name:</span>{" "}
+                            <span className="font-medium">Organization Name:</span>
                             {organization}
                         </p>
                     </div>
