@@ -54,4 +54,32 @@ const loginUser = async (req, res) => {
 }
 
 
-module.exports = { registerNewUser, loginUser}
+const changePassword= async(req, res)=>{
+  try{
+    //fetching all the details of user by id
+    const userById = await User.findById(req.body.id )
+   
+    //error showing while id not found in database
+    if (!userById) {
+        return res.json({ msg: 'No user found', check:false })
+    }
+
+        //if id is found then, input currentPassword is matched with the password in database
+        const passwordMatch = await bcrypt.compare(req.body.currentPassword, userById.password)
+
+            //if password is matched then, our newPassword will encrypt at first and then will replaced with the database password
+    if (passwordMatch) {
+      const hashPassword = await bcrypt.hash(req.body.newPassword, saltRounds)
+      userById.password = hashPassword
+      await userById.save();
+
+      res.json({ msg: "password changed successfully", check:true })
+    } else {
+      res.json({ msg: "wrong current password", check:false })
+    }
+  }catch(err){
+    console.log(err)
+  }
+}
+
+module.exports = { registerNewUser, loginUser, changePassword}
