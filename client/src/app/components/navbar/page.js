@@ -3,7 +3,9 @@ import React from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "@/app/redux/reducerSlices/userSlice";
+import { useRouter } from "next/navigation";
 const loggedInConfig = {
     true: [
         { label: "Your Work", href: "/my-work" },
@@ -19,7 +21,13 @@ const loggedInConfig = {
 
 
 const page = () => {
+    const router= useRouter()
+    const dispatch= useDispatch()
     const { isLoggedIn, userDetails } = useSelector(state => state.user)
+    const handleLogout=()=>{
+        dispatch(logoutUser())
+        router.push('/login')
+    }
     const AuthButtons = () => {
         return (
             <>
@@ -81,7 +89,7 @@ const page = () => {
                                 <DropdownItem key="system">System</DropdownItem>
                                 <DropdownItem key="configurations">Configurations</DropdownItem>
                                 <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-                                <DropdownItem key="logout" color="danger">
+                                <DropdownItem key="logout" color="danger"  onClick={handleLogout}>
                                     Log Out
                                 </DropdownItem>
                             </DropdownMenu>
