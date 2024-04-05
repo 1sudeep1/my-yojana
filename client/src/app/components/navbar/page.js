@@ -8,7 +8,6 @@ import { logoutUser } from "@/app/redux/reducerSlices/userSlice";
 import { useRouter } from "next/navigation";
 const loggedInConfig = {
     true: [
-        { label: "Your Work", href: "/my-work" },
         { label: "Members", href: "/members" },
         { label: "Projects", href: "/projects" },
         { label: "Dashboard", href: "/dashboard" },

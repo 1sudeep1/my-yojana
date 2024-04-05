@@ -82,4 +82,13 @@ const changePassword= async(req, res)=>{
   }
 }
 
-module.exports = { registerNewUser, loginUser, changePassword}
+const getAllUsers= async(req, res)=>{
+  try{
+      const userList= await User.find()
+      res.status(200).json({userList, msg:'All Users fetched successfully'})
+  }catch(err){
+    console.log(err)
+  }
+}
+
+module.exports = { registerNewUser, loginUser, changePassword, getAllUsers}
