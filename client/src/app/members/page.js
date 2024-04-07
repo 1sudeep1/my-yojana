@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, getKeyValue} from "@nextui-org/react";
 import axios from "axios";
-
+import { useSelector } from 'react-redux';
 const columns = [
-  {name: "NAME", uid: "name"},
+  {name: "EMAIL", uid: "email"},
   {name: "ROLE", uid: "role"},
-  {name: "STATUS", uid: "status"},
+  {name: "FULL NAME", uid: "fullName"},
   {name: "ACTIONS", uid: "actions"},
 ];
 
@@ -17,6 +17,8 @@ const statusColorMap = {
 };
 
 const UserTable=(props)=> {
+const {userDetails}= useSelector(state=>state.user)
+
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
 
@@ -81,7 +83,7 @@ const UserTable=(props)=> {
       <TableBody items={props.userList}>
         {(item) => (
           <TableRow key={item}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            {(columnKey) => <TableCell className={`${userDetails._id==item._id? 'bg-gray-300 p-2': null}`}>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>
