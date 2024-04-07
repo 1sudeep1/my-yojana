@@ -84,8 +84,10 @@ const changePassword= async(req, res)=>{
 
 const getAllUsers= async(req, res)=>{
   try{
-      const userList= await User.find()
-      res.status(200).json({userList, msg:'All Users fetched successfully'})
+      const count= await User.find().count()
+      const skipCount=(req.query.page-1)*5
+      const userList= await User.find().limit(5).skip(skipCount)
+      res.status(200).json({userList, count, msg:'All Users fetched successfully'})
   }catch(err){
     console.log(err)
   }
