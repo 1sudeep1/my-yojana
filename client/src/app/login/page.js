@@ -33,7 +33,6 @@ const Login = () => {
         validationSchema: LoginSchema,
 
         onSubmit: values => {
-            console.log(values)
             handleLogin(values)
         }
     })
