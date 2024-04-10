@@ -84,6 +84,10 @@ const changePassword= async(req, res)=>{
 
 const getAllUsers= async(req, res)=>{
   try{
+    if(!req.query.page){
+      const userList= await User.find().select('fullName email')
+      res.status(200).json({userList, msg:'All Users fetched successfully'})
+    }
       const count= await User.find().count()
       const skipCount=(req.query.page-1)*5
       const userList= await User.find().limit(5).skip(skipCount)
@@ -92,5 +96,6 @@ const getAllUsers= async(req, res)=>{
     console.log(err)
   }
 }
+
 
 module.exports = { registerNewUser, loginUser, changePassword, getAllUsers}

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
-import DynamicForm from '../dynamicForm/page';
 
 const ModalView = (props) => {
-    const { isOpen, onOpenChange, title } = props
+    const { isOpen, onOpenChange, title} = props
+
     return (
         <div>
             <Modal
@@ -25,20 +25,8 @@ const ModalView = (props) => {
                         <>
                             <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
                             <ModalBody>
-                                <DynamicForm
-                                    buttonTitle='Add'
-                                    formfields={[
-                                        {label:'Project Name'},
-                                        {label:'Project Description'},
-                                        {label:'Members', type:'dropdown'}
-                                    ]}
-                                />
+                            {props.children}
                             </ModalBody>
-                            <ModalFooter>
-                                <Button className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20" onPress={onClose}>
-                                    Action
-                                </Button>
-                            </ModalFooter>
                         </>
                     )}
                 </ModalContent>
