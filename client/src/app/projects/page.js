@@ -28,7 +28,7 @@ const Projects = () => {
       <ModalView title="Add Projects" isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange}>
         <DynamicForm
           buttonTitle='Add'
-          formfields={[
+          formFields={[
             { label: 'Project Name', name:'projectName' },
             { label: 'Project Description', name:'projectDescription' },
             { label: 'Members', type: 'dropdown', userList:members, name:'members'}

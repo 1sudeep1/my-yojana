@@ -17,33 +17,35 @@ const DynamicForm = (props) => {
 
     const handleDynamicForm = async (inputFields) => {
         try {
+            //to join keys and make a first letter small
             // const formattedFields=Object.entries(inputFields).map((item)=>{
             //     item[0]= item[0][0].toLowerCase() + item[0].slice(1)
             //     const mappedObj= {[item[0].split(' ').join('')]:item[1]}
             //     return mappedObj
             // })
             // console.log(formattedFields)
-            const map={}
-            props.formfields.forEach(item=>{
-                map[item.label]= item.type
+
+            // console.log(props, inputFields)
+
+            const map = {}
+            props.formFields.forEach(item => {
+                map[item.name] = item.type
             })
 
-            for(let item in inputFields){
-                if(map[item.type]=='dropdown'){
-                    inputFields[item]= inputFields?.[item]?.split(',')
+            for (let item in inputFields) {
+                if (map[item] == 'dropdown') {
+                    inputFields[item] = inputFields?.[item]?.split(',')
                 }
             }
-            debugger
         } catch (err) {
             console.log(err)
         }
     }
 
-
     return (
 
         <form onSubmit={formik.handleSubmit} >
-            {props.formfields.map((item) => {
+            {props.formFields.map((item) => {
                 if (item.type == 'dropdown') {
                     return (
                         <Select
