@@ -19,10 +19,12 @@ const port=process.env.PORT
 app.use(express.json())
 
 //importing routes
-const userRouter= require('./routes/users')
+const userRoute= require('./routes/usersRoute')
+const projectRoute= require('./routes/projectsRoute')
 
 //using routes
-app.use(userRouter)
+app.use(userRoute)
+app.use(projectRoute)
 
 
 //listening the port

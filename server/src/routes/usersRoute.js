@@ -1,7 +1,6 @@
-const {registerNewUser, loginUser, changePassword, getAllUsers, allUsers} = require('../controllers/users')
+const {registerNewUser, loginUser, changePassword, getAllUsers} = require('../controllers/users')
 const express= require('express')
 const router= express.Router()
-
 
 router.post('/register', registerNewUser)
 router.post('/login', loginUser)

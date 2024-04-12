@@ -1,17 +1,15 @@
 import React from 'react'
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-const CardView = () => {
+const CardView = (props) => {
   return (
-    <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
-        <Card shadow="sm" isPressable onPress={() => console.log("item pressed")}>
-          <CardBody className="overflow-visible p-0">
-          </CardBody>
-          <CardFooter className="text-small justify-between">
-            <b>Hello</b>
-            <p className="text-default-500">211</p>
-          </CardFooter>
-        </Card>
-    </div>
+    <Card shadow="sm" isPressable onPress={() => console.log("item pressed")}>
+      <CardBody className="overflow-visible p-0">
+        <p className='px-3 text-lg font-bold'>{props.item.projectName}</p>
+        <p className='px-3'>{props.item.projectDescription}</p>
+      </CardBody>
+      <CardFooter className="text-small justify-between">
+      </CardFooter>
+    </Card>
   )
 }
 

@@ -12,10 +12,12 @@ const DynamicForm = (props) => {
 
         onSubmit: values => {
             handleDynamicForm(values)
+            formik.resetForm()
         }
     })
 
     const handleDynamicForm = async (inputFields) => {
+
         try {
             //to join keys and make a first letter small
             // const formattedFields=Object.entries(inputFields).map((item)=>{
@@ -24,8 +26,6 @@ const DynamicForm = (props) => {
             //     return mappedObj
             // })
             // console.log(formattedFields)
-
-            // console.log(props, inputFields)
 
             const map = {}
             props.formFields.forEach(item => {
@@ -37,6 +37,7 @@ const DynamicForm = (props) => {
                     inputFields[item] = inputFields?.[item]?.split(',')
                 }
             }
+            await props.onSave(inputFields)
         } catch (err) {
             console.log(err)
         }

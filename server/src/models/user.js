@@ -10,7 +10,7 @@ const userSchema = new Schema({
     },
     fullName: String, //String is shorthand of type:String
     password: String,
-    Organization: String,
+    organization: String,
     role: { 
         type: String, 
         enum:['Project Manager', 'Developer', 'Designer', 'Staff', 'Software Engineer'],
