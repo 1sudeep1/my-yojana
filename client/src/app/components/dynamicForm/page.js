@@ -7,7 +7,6 @@ const DynamicForm = (props) => {
     const [values, setValues] = React.useState(new Set([]));
     const formik = useFormik({
         initialValues: {
-
         },
 
         onSubmit: values => {
@@ -36,6 +35,7 @@ const DynamicForm = (props) => {
                 if (map[item] == 'dropdown') {
                     inputFields[item] = inputFields?.[item]?.split(',')
                 }
+
             }
             await props.onSave(inputFields)
         } catch (err) {
@@ -43,6 +43,7 @@ const DynamicForm = (props) => {
         }
     }
 
+    console.log(formik)
     return (
 
         <form onSubmit={formik.handleSubmit} >
@@ -88,16 +89,15 @@ const DynamicForm = (props) => {
                     )
                 }
                 return (
-                    <Input type={item.type} id={item.label} name={item.name} label={item.label} onChange={formik.handleChange} value={formik.values[item.label]} placeholder={`Enter ${item.label}`} labelPlacement='outside' />
+                    <Input type={item.type} id={item.label} name={item.name} label={item.label} onBlur={(e) => { props.generateKey(formik.values['projectName'], e) }} onChange={formik.handleChange} value={formik.values[item.label]} placeholder={`Enter ${item.label}`} labelPlacement='outside' />
                 )
-
             })}
 
-            <Button className='my-5' type='submit' color='primary' variant='flat'>{props.buttonTitle}</Button>
-        </form>
+            <p className='my-5'>Project Key: {props.projectKey}</p>
 
+            <Button type='submit' color='primary' variant='flat'>{props.buttonTitle}</Button>
+        </form>
     )
 }
-
 
 export default DynamicForm

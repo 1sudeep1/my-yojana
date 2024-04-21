@@ -10,7 +10,8 @@ const projectSchema = new Schema({
     },
     projectDescription: String, //String is shorthand of type:String
     members: Array,
-    organization:String
+    organization:String,
+    projectKey:String
 })
 
 const Project= mongoose.model('Project', projectSchema)

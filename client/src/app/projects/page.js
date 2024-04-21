@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import CardView from '../components/cardView/page'
-import { Button, useDisclosure } from "@nextui-org/react"
+import { Button, input, useDisclosure } from "@nextui-org/react"
 import ModalView from '../components/modalView/page'
 import DynamicForm from '../components/dynamicForm/page'
 import axios from "axios";
@@ -11,6 +11,7 @@ const Projects = () => {
   const { userDetails } = useSelector(state => state.user)
   const [members, setMembers] = useState([])
   const [allProjects, setallProjects] = useState([])
+  const [projectKey, setProjectKey]= useState('')
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const fetchAllMembers = async () => {
     try {
@@ -26,6 +27,7 @@ const Projects = () => {
   const onSave = async (inputFields) => {
     try {
         inputFields.organization = userDetails.organization;
+        inputFields.projectKey= projectKey
         const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/projects`, inputFields);
         const data = await res.data;
         toast(data.msg, {
@@ -64,6 +66,22 @@ const Projects = () => {
     }
 }
 
+const generateKey=(inputProject, event)=>{
+if(event.target.name==='projectName'){
+  if(!inputProject) return ''
+  let finalKey=userDetails.organization?.charAt(0).toUpperCase()+inputProject?.split(' ').map(item=>item[0]).join('').toUpperCase()
+  const projectKeys= allProjects.map((item)=>{
+    return item.projectKey
+  })
+  if(projectKeys.includes(finalKey)){
+    finalKey= finalKey+ inputProject[Math.floor(Math.random()*inputProject.length)].toUpperCase()
+  }
+  setProjectKey(finalKey)
+  return finalKey
+}
+
+}
+
 
   const fetchAllProjects = async () => {
     const allProjects = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/projects`)
@@ -75,6 +93,7 @@ const Projects = () => {
     fetchAllMembers()
     fetchAllProjects()
   }, [])
+  console.log(projectKey, 'hello')
   return (
     <div>
       <Button onPress={onOpen} className='m-4' color='primary'>Add Projects</Button>
@@ -82,6 +101,8 @@ const Projects = () => {
         <DynamicForm
           buttonTitle='Add'
           onSave={onSave}
+          generateKey={generateKey}
+          projectKey={projectKey}
           formFields={[
             { label: 'Project Name', name: 'projectName' },
             { label: 'Project Description', name: 'projectDescription' },
