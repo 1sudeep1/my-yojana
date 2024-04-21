@@ -48,49 +48,96 @@ const DynamicForm = (props) => {
 
         <form onSubmit={formik.handleSubmit} >
             {props.formFields.map((item) => {
-                if (item.type == 'dropdown') {
-                    return (
-                        <Select
-                            items={item.userList}
-                            label={item.label}
-                            name={item.name}
-                            onChange={formik.handleChange}
-                            variant="bordered"
-                            isMultiline={true}
-                            selectionMode="multiple"
-                            placeholder={`Select a ${item.label}`}
-                            labelPlacement="outside"
-                            classNames={{
-                                base: "max-w-xs",
-                                trigger: "min-h-unit-12 py-2",
-                            }}
-                            renderValue={(items) => {
-                                return (
-                                    <div className="flex flex-wrap gap-2">
-                                        {items.map((item) => (
-                                            <Chip key={item.key}>{item.data.fullName}</Chip>
-                                        ))}
-                                    </div>
-                                );
-                            }}
-                        >
-                            {(user) => (
-                                <SelectItem key={user.fullName} textValue={user.fullName}>
-                                    <div className="flex gap-2 items-center">
-                                        {/* <Avatar alt={user.name} className="flex-shrink-0" size="sm" src={user.avatar} /> */}
-                                        <div className="flex flex-col">
-                                            <span className="text-small">{user.fullName}</span>
-                                            <span className="text-tiny text-default-400">{user.email}</span>
+                let membersDropdown;
+                switch (item.type){
+                    case 'dropdown':
+                        let projectLeadDropdown;
+                        switch (item.name){
+                            case 'projectLead':
+                                projectLeadDropdown=<Select
+                                items={item.userList}
+                                label={item.label}
+                                name={item.name}
+                                onChange={formik.handleChange}
+                                variant="bordered"
+                                isMultiline={true}
+                                selectionMode="single"
+                                placeholder={`Select a ${item.label}`}
+                                labelPlacement="outside"
+                                classNames={{
+                                    base: "max-w-xs",
+                                    trigger: "min-h-unit-12 py-2",
+                                }}
+                                renderValue={(items) => {
+                                    return (
+                                        <div className="flex flex-wrap gap-2">
+                                            {items.map((item) => (
+                                                <Chip key={item.key}>{item.data.fullName}</Chip>
+                                            ))}
                                         </div>
-                                    </div>
-                                </SelectItem>
-                            )}
-                        </Select>
-                    )
+                                    );
+                                }}
+                            >
+                                {(user) => (
+                                    <SelectItem key={user.fullName} textValue={user.fullName}>
+                                        <div className="flex gap-2 items-center">
+                                            {/* <Avatar alt={user.name} className="flex-shrink-0" size="sm" src={user.avatar} /> */}
+                                            <div className="flex flex-col">
+                                                <span className="text-small">{user.fullName}</span>
+                                                <span className="text-tiny text-default-400">{user.email}</span>
+                                            </div>
+                                        </div>
+                                    </SelectItem>
+                                )}
+                            </Select>
+                            break;
+                            default:
+                                projectLeadDropdown=<Select
+                                items={item.userList}
+                                label={item.label}
+                                name={item.name}
+                                onChange={formik.handleChange}
+                                variant="bordered"
+                                isMultiline={true}
+                                selectionMode="multiple"
+                                placeholder={`Select a ${item.label}`}
+                                labelPlacement="outside"
+                                classNames={{
+                                    base: "max-w-xs",
+                                    trigger: "min-h-unit-12 py-2",
+                                }}
+                                renderValue={(items) => {
+                                    return (
+                                        <div className="flex flex-wrap gap-2">
+                                            {items.map((item) => (
+                                                <Chip key={item.key}>{item.data.fullName}</Chip>
+                                            ))}
+                                        </div>
+                                    );
+                                }}
+                            >
+                                {(user) => (
+                                    <SelectItem key={user.fullName} textValue={user.fullName}>
+                                        <div className="flex gap-2 items-center">
+                                            {/* <Avatar alt={user.name} className="flex-shrink-0" size="sm" src={user.avatar} /> */}
+                                            <div className="flex flex-col">
+                                                <span className="text-small">{user.fullName}</span>
+                                                <span className="text-tiny text-default-400">{user.email}</span>
+                                            </div>
+                                        </div>
+                                    </SelectItem>
+                                )}
+                            </Select>
+                        }
+                        return projectLeadDropdown
+                    break;
+
+                   default:
+                    membersDropdown=<Input type={item.type} id={item.label} name={item.name} label={item.label} onBlur={(e) => { props.generateKey(formik.values['projectName'], e) }} onChange={formik.handleChange} value={formik.values[item.label]} placeholder={`Enter ${item.label}`} labelPlacement='outside' />
+                        break;
                 }
-                return (
-                    <Input type={item.type} id={item.label} name={item.name} label={item.label} onBlur={(e) => { props.generateKey(formik.values['projectName'], e) }} onChange={formik.handleChange} value={formik.values[item.label]} placeholder={`Enter ${item.label}`} labelPlacement='outside' />
-                )
+                return membersDropdown;
+
             })}
 
             <p className='my-5'>Project Key: {props.projectKey}</p>

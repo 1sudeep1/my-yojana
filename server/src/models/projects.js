@@ -9,6 +9,7 @@ const projectSchema = new Schema({
         required: true
     },
     projectDescription: String, //String is shorthand of type:String
+    projectLead:Array,
     members: Array,
     organization:String,
     projectKey:String

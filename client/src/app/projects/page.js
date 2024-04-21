@@ -28,6 +28,7 @@ const Projects = () => {
     try {
         inputFields.organization = userDetails.organization;
         inputFields.projectKey= projectKey
+        console.log(inputFields, 'sudeep')
         const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/projects`, inputFields);
         const data = await res.data;
         toast(data.msg, {
@@ -93,7 +94,6 @@ if(event.target.name==='projectName'){
     fetchAllMembers()
     fetchAllProjects()
   }, [])
-  console.log(projectKey, 'hello')
   return (
     <div>
       <Button onPress={onOpen} className='m-4' color='primary'>Add Projects</Button>
@@ -106,6 +106,7 @@ if(event.target.name==='projectName'){
           formFields={[
             { label: 'Project Name', name: 'projectName' },
             { label: 'Project Description', name: 'projectDescription' },
+            { label: 'Project Lead', type: 'dropdown', userList: members, name: 'projectLead' },
             { label: 'Members', type: 'dropdown', userList: members, name: 'members' }
           ]}
         />
