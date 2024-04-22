@@ -7,7 +7,8 @@ const addNewProjects = async (req, res) => {
             return res.status(400).json({ msg: 'Project already exists' });
         }
 
-        await Project.create(req.body);
+        const refactorDetails={...req.body, projectLead:req.body.projectLead[0]}
+        await Project.create(refactorDetails);
         return res.status(200).json({ msg: 'Project created successfully' });
 
     } catch (err) {
