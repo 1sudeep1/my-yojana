@@ -19,8 +19,11 @@ const addNewProjects = async (req, res) => {
 
 const getAllProjects = async (req, res) => {
     try{
-        const allProjects= await Project.find()
-        res.status(200).json({allProjects, msg:'All projects fetched successfully'})
+        const count= await Project.find().count()
+        const skipCount=(req.query.page-1)*5
+        const allProjects= await Project.find().limit(5).skip(skipCount)
+
+        res.status(200).json({allProjects, count, msg:'All projects fetched successfully'})
         
     }catch(err){
         console.log(Error)

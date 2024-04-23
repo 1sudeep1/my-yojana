@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Button, input, useDisclosure } from "@nextui-org/react"
+import { Button, input, useDisclosure, Pagination } from "@nextui-org/react"
 import ModalView from '../components/modalView/page'
 import DynamicForm from '../components/dynamicForm/page'
 import axios from "axios";
@@ -13,6 +13,7 @@ const Projects = () => {
   const [allProjects, setallProjects] = useState([])
   const [projectKey, setProjectKey] = useState('')
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [count, setCount]= useState(0)
   const fetchAllMembers = async () => {
     try {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
@@ -83,10 +84,11 @@ const Projects = () => {
   }
 
 
-  const fetchAllProjects = async () => {
-    const allProjects = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/projects`)
-    const data = allProjects.data
-    setallProjects(data.allProjects)
+  const fetchAllProjects = async (page=1) => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/projects?page=${page}`)
+    const {count, allProjects}= await res.data
+    setCount(count)
+    setallProjects(allProjects)
   }
 
   useEffect(() => {
@@ -112,6 +114,8 @@ const Projects = () => {
         />
       </ModalView>
       <TableView allProjects={allProjects} />
+      <Pagination className='w-full mx-auto' onChange={(page)=>fetchAllProjects(page)} showControls total={Math.ceil(count/5 || 1)} initialPage={1} />
+
     </div>
   )
 }
