@@ -1,12 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { Button, input, useDisclosure, Pagination } from "@nextui-org/react"
-import ModalView from '../components/modalView/page'
-import DynamicForm from '../components/dynamicForm/page'
+import ModalView from '../../components/modalView/page'
+import DynamicForm from '../../components/dynamicForm/page'
 import axios from "axios";
 import { useSelector } from 'react-redux'
 import toast from 'react-hot-toast';
-import TableView from '../components/TableView/page'
+import TableView from '../../components/TableView/page'
 const Projects = () => {
   const { userDetails } = useSelector(state => state.user)
   const [members, setMembers] = useState([])

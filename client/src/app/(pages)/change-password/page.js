@@ -3,12 +3,12 @@ import React from 'react'
 import { Card, CardBody } from "@nextui-org/react";
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import FormSection from '../components/formSection/page'
+import FormSection from '../../components/formSection/page'
 import { Input, Button } from "@nextui-org/react";
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../redux/reducerSlices/userSlice';
+import { logoutUser } from '../../redux/reducerSlices/userSlice';
 import { useRouter } from 'next/navigation';
 
 const changePasswordSchema = Yup.object().shape({

@@ -1,13 +1,13 @@
 'use client'
 import React from 'react';
 import * as Yup from 'yup';
-import FormSection from '../components/formSection/page'
+import FormSection from '../../components/formSection/page'
 import {Input, Button } from "@nextui-org/react";
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import {loginUser} from '../redux/reducerSlices/userSlice'
+import {loginUser} from '../../redux/reducerSlices/userSlice'
 import { useDispatch } from 'react-redux';
 
 const LoginSchema = Yup.object().shape({

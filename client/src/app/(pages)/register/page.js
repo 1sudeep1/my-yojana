@@ -3,7 +3,7 @@ import React , {useState} from 'react';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast'; //toast can use any where in any page but toaster should be used in provider
 import { useRouter } from 'next/navigation';
-import FormSection from '../components/formSection/page'
+import FormSection from '../../components/formSection/page'
 import { CiMail } from "react-icons/ci";
 import {Dropdown,Input, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import { useFormik } from 'formik';
