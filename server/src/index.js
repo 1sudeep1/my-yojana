@@ -21,10 +21,12 @@ app.use(express.json())
 //importing routes
 const userRoute= require('./routes/usersRoute')
 const projectRoute= require('./routes/projectsRoute')
+const sprintRoute= require('./routes/sprintsRoute')
 
 //using routes
 app.use(userRoute)
 app.use(projectRoute)
+app.use(sprintRoute)
 
 
 //listening the port
