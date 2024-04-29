@@ -1,9 +1,10 @@
 "use client"
 import AdminLayout from '@/app/components/adminLayout/page'
 import { Button, Input } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const Tasks = () => {
+  const inputField = useRef(null);
   const [sprintList, setSprintList] = useState([])
   const [issueList, setIssueList] = useState([])
   const [activeForm, setActiveForm] = useState([])
@@ -14,16 +15,32 @@ const Tasks = () => {
     existingSprintList.push(sprintDetails)
     setSprintList(existingSprintList)
   }
+
+  const handleActiveForm = (index) => {
+    setActiveForm(index)
+  }
+
+  useEffect(() => {
+    document.body.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        setIssueList(prevState => {
+          if (!prevState.includes(inputField.current.value)) {
+            return ([...prevState, {id: prevState.length+1, issueName: inputField.current.value}])
+          } else return [...prevState]
+        })
+      }
+    })
+  }, [])
   return (
     <>
       <AdminLayout>
+        {JSON.stringify(issueList)}
         <div className='flex flex-col items-end gap-5 p-5 h-full'>
           <Button onClick={handleSprint}>Create sprint</Button>
           <div className='w-full flex flex-col gap-10'>
             {sprintList && sprintList.map((sprintItem, sprintId) => {
               return (
                 <div key={sprintId} className='p-4 bg-gray-100 w-full flex flex-col gap-1 items-start'>
-                  {/* <Input label={item.sprintName} id={item.sprintName} name={item.sprintName} labelPlacement='outside' /> */}
                   <div className='flex items-center justify-between w-full'>
                     <p>{sprintItem.sprintName}</p>
                     <Button disabled={!issueList.length > 0} className={`rounded text-sm text-white ${issueList > 0 ? "bg-blue-700" : "bg-blue-500"}`}>
@@ -31,9 +48,9 @@ const Tasks = () => {
                     </Button>
                   </div>
                   {issueList.length > 0 ? (
-                    issueList.map((issueItem, issueId) => (
+                    issueList?.map((issueItem, issueId) => (
                       <div key={issueId} className='w-full bg-white p-2'>
-                        {issueItem}
+                        {issueItem.issueName}
                       </div>
                     ))
                   ) : (
@@ -44,7 +61,7 @@ const Tasks = () => {
                     </div>
                   )}
                   <div className='w-full relative'>
-                    <Button className='w-full text-start hover:bg-gray-200 px-1 py-2 flex justify-start'>
+                    <Button onClick={() => handleActiveForm(sprintId)} className='w-full text-start hover:bg-gray-200 px-1 py-2 flex justify-start'>
                       + Create Issue
                     </Button>
                     <div className={`${activeForm === sprintId ? "flex" : "hidden"} absolute w-full h-full inset-0 bg-white  border border-blue-500 items-center gap-3 px-2`}>
@@ -53,6 +70,7 @@ const Tasks = () => {
                         <option value="bug">Bug</option>
                       </select>
                       <input
+                        ref={inputField}
                         type="text"
                         placeholder="Enter issue title?"
                         className="w-full focus:outline-none"
