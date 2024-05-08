@@ -2,6 +2,7 @@
 import AdminLayout from '@/app/components/adminLayout/page'
 import { Button, Input } from '@nextui-org/react'
 import React, { useEffect, useRef, useState } from 'react'
+import { ReactSortable } from "react-sortablejs";
 
 const Tasks = () => {
   const inputField = useRef(null);
@@ -25,62 +26,162 @@ const Tasks = () => {
       if (e.key === "Enter") {
         setIssueList(prevState => {
           if (!prevState.includes(inputField.current.value)) {
-            return ([...prevState, {id: prevState.length+1, issueName: inputField.current.value}])
+            return ([...prevState, { id: prevState.length + 1, issueName: inputField.current.value }])
           } else return [...prevState]
         })
       }
     })
   }, [])
+
+  const sortableOptions = {
+    animation: 150,
+    fallbackOnBody: true,
+    swapThreshold: 0.65,
+    ghostClass: "ghost",
+    group: "shared",
+    forceFallback: true
+  };
+  const SudeepSort = () => {
+    const [blocks, setBlocks] = useState([
+      {
+        id: 1,
+        content: "item 1",
+        parent_id: null,
+        type: "container",
+        children: [
+          {
+            id: 2,
+            content: "item 2",
+            width: 3,
+            type: "text",
+            parent_id: 1
+          },
+          {
+            id: 3,
+            content: "item 3",
+            width: 3,
+            type: "text",
+            parent_id: 1
+          }
+        ]
+      },
+      {
+        id: 4,
+        content: "item 2",
+        parent_id: null,
+        type: "container",
+        children: [
+          {
+            id: 5,
+            content: "item 5",
+            width: 3,
+            parent_id: 2,
+            type: "container",
+            children: [
+              { id: 8, content: "item 8", width: 6, type: "text", parent_id: 5 },
+              { id: 9, content: "item 9", width: 6, type: "text", parent_id: 5 }
+            ]
+          },
+          {
+            id: 6,
+            content: "item 6",
+            width: 2,
+            type: "text",
+            parent_id: 2
+          },
+          {
+            id: 7,
+            content: "item 7",
+            width: 2,
+            type: "text",
+            parent_id: 2
+          }
+        ]
+      }
+    ]);
+
+    return (
+      <div>
+        <ReactSortable list={blocks} setList={setBlocks} {...sortableOptions}>
+          {blocks.map((block, blockIndex) => (
+            <BlockWrapper
+              key={block.id}
+              block={block}
+              blockIndex={[blockIndex]}
+              setBlocks={setBlocks}
+            />
+          ))}
+        </ReactSortable>
+      </div>
+    );
+  }
+  function Container({ block, blockIndex, setBlocks }) {
+    return (
+      <>
+        <ReactSortable
+          key={block.id}
+          list={block.children}
+          setList={(currentList) => {
+            setBlocks((sourceList) => {
+              const tempList = [...sourceList];
+              const _blockIndex = [...blockIndex];
+              const lastIndex = _blockIndex.pop();
+              const lastArr = _blockIndex.reduce(
+                (arr, i) => arr[i]["children"],
+                tempList
+              );
+              console.log(lastIndex);
+              lastArr[lastIndex]["children"] = currentList;
+              return tempList;
+            });
+          }}
+          {...sortableOptions}
+        >
+          {block.children &&
+            block.children.map((childBlock, index) => {
+              return (
+                <BlockWrapper
+                  key={childBlock.id}
+                  block={childBlock}
+                  blockIndex={[...blockIndex, index]}
+                  setBlocks={setBlocks}
+                />
+              );
+            })}
+        </ReactSortable>
+      </>
+    );
+  }
+  function BlockWrapper({ block, blockIndex, setBlocks }) {
+    // console.log(block);
+    if (!block) return null;
+    if (block.type === "container") {
+      return (
+        <div className="block">
+          container: {block.content}
+          <Container
+            block={block}
+            setBlocks={setBlocks}
+            blockIndex={blockIndex}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div className="block">
+          text: {block.content}
+        </div>
+      );
+    }
+  }
+
   return (
     <>
       <AdminLayout>
         {JSON.stringify(issueList)}
         <div className='flex flex-col items-end gap-5 p-5 h-full'>
           <Button onClick={handleSprint}>Create sprint</Button>
-          <div className='w-full flex flex-col gap-10'>
-            {sprintList && sprintList.map((sprintItem, sprintId) => {
-              return (
-                <div key={sprintId} className='p-4 bg-gray-100 w-full flex flex-col gap-1 items-start'>
-                  <div className='flex items-center justify-between w-full'>
-                    <p>{sprintItem.sprintName}</p>
-                    <Button disabled={!issueList.length > 0} className={`rounded text-sm text-white ${issueList > 0 ? "bg-blue-700" : "bg-blue-500"}`}>
-                      Start Sprint
-                    </Button>
-                  </div>
-                  {issueList.length > 0 ? (
-                    issueList?.map((issueItem, issueId) => (
-                      <div key={issueId} className='w-full bg-white p-2'>
-                        {issueItem.issueName}
-                      </div>
-                    ))
-                  ) : (
-                    <div className='w-full py-2 text-center border border-gray-500 border-dashed'>
-                      <p>
-                        Plant a sprint by dragging a issue or by creating new one
-                      </p>
-                    </div>
-                  )}
-                  <div className='w-full relative'>
-                    <Button onClick={() => handleActiveForm(sprintId)} className='w-full text-start hover:bg-gray-200 px-1 py-2 flex justify-start'>
-                      + Create Issue
-                    </Button>
-                    <div className={`${activeForm === sprintId ? "flex" : "hidden"} absolute w-full h-full inset-0 bg-white  border border-blue-500 items-center gap-3 px-2`}>
-                      <select name="" id="" className="focus:outline-none">
-                        <option value="feature">Feature</option>
-                        <option value="bug">Bug</option>
-                      </select>
-                      <input
-                        ref={inputField}
-                        type="text"
-                        placeholder="Enter issue title?"
-                        className="w-full focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          <SudeepSort />
         </div>
       </AdminLayout>
     </>
