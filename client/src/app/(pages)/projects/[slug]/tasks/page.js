@@ -55,7 +55,7 @@ import { ReactSortable } from "react-sortablejs";
     if (sprintListItem.type === "container") {
       return (
         <div className="flex flex-col gap-y-3 bg-red-500 p-4 my-3">
-          Yojana: {sprintListItem.sprintTitle}
+          {sprintListItem.sprintTitle}
           <Container
             sprintListItem={sprintListItem}
             setSprintLists={setSprintLists}
@@ -75,7 +75,7 @@ import { ReactSortable } from "react-sortablejs";
     const [sprintLists, setSprintLists] = useState([
       {
         id: 1,
-        sprintTitle: "1",
+        sprintTitle: "Yojana 1",
         parent_id: null,
         type: "container",
         tasks: [
@@ -97,7 +97,7 @@ import { ReactSortable } from "react-sortablejs";
       },
       {
         id: 2,
-        sprintTitle: "2",
+        sprintTitle: "Yojana 2",
         parent_id: null,
         type: "container",
         tasks: [
