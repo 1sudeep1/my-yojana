@@ -1,144 +1,114 @@
 "use client"
 import AdminLayout from '@/app/components/adminLayout/page'
-import { Button} from '@nextui-org/react'
-import React, {useState } from 'react'
+import { Button } from '@nextui-org/react'
+import React, { useRef, useState } from 'react'
 import { ReactSortable } from "react-sortablejs";
 
-  const sortableOptions = {
-    animation: 150,
-    fallbackOnBody: true,
-    swapThreshold: 0.65,
-    ghostClass: "ghost",
-    group: "shared",
-    forceFallback: true
-  };
+const sortableOptions = {
+  animation: 150,
+  fallbackOnBody: true,
+  swapThreshold: 0.65,
+  ghostClass: "ghost",
+  group: "shared",
+  forceFallback: true
+};
 
-  function Container({ sprintListItem, sprintIndex, setSprintLists }) {
-    return (
-      <>
+const Tasks = () => {
+  const inputRef = useRef(null);
+  const [activeForm, setActiveForm] = useState(null);
+  const [sprintsList, setSprintsList] = useState([]);
+
+  const handleActiveForm = (index) => {
+    setActiveForm(index);
+  };
+  const addSprint = async () => {
+    const existingSprintsList = [...sprintsList];
+    const tempSprint = {
+      sprintName: "Yojana-" + (existingSprintsList.length + 1),
+      tasks: [],
+    };
+    existingSprintsList.push(tempSprint);
+    setSprintsList(existingSprintsList);
+  }
+
+  return (
+    <AdminLayout>
+      <div className="flex flex-col items-end gap-4">
+        <Button onClick={addSprint}>Create Sprint</Button>
+
+        {JSON.stringify(sprintsList)}
         <ReactSortable
-          key={sprintListItem.id}
-          list={sprintListItem.tasks}
-          setList={(currentList) => {
-            setSprintLists((sourceList) => {
-              const tempList = [...sourceList];
-              const _sprintIndex = [...sprintIndex];
-              const lastIndex = _sprintIndex.pop();
-              const lastArr = _sprintIndex.reduce(
-                (arr, i) => arr[i]["children"],
-                tempList
-              );
-              console.log(lastIndex);
-              lastArr[lastIndex]["children"] = currentList;
-              return tempList;
-            });
-          }}
+          className="w-full"
+          list={sprintsList}
+          setList={setSprintsList}
           {...sortableOptions}
         >
-          {sprintListItem.children &&
-            sprintListItem.children.map((taskItem, taskId) => {
-              return (
-                <BlockWrapper
-                  key={taskId}
-                  sprintListItem={taskItem}
-                  sprintIndex={[...sprintIndex, taskId]}
-                  setSprintLists={setSprintLists}
-                />
-              );
-            })}
-        </ReactSortable>
-      </>
-    );
-  }
-  function BlockWrapper({ sprintListItem, sprintIndex, setSprintLists }) {
-    if (!sprintListItem) return null;
-    if (sprintListItem.type === "container") {
-      return (
-        <div className="flex flex-col gap-y-3 bg-red-500 p-4 my-3">
-          {sprintListItem.sprintTitle}
-          <Container
-            sprintListItem={sprintListItem}
-            setSprintLists={setSprintLists}
-            sprintIndex={sprintIndex}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <div className="block bg-green-600 ms-4 p-2">
-          {sprintListItem.taskTitle}
-        </div>
-      );
-    }
-  }
-  const Tasks = () => {
-    const [sprintLists, setSprintLists] = useState([
-      {
-        id: 1,
-        sprintTitle: "Yojana 1",
-        parent_id: null,
-        type: "container",
-        tasks: [
-          {
-            id: 1,
-            taskTitle: "Register Page",
-            width: 3,
-            type: "text",
-            parent_id: 1
-          },
-          {
-            id: 2,
-            taskTitle: "Login Page",
-            width: 3,
-            type: "text",
-            parent_id: 1
-          }
-        ]
-      },
-      {
-        id: 2,
-        sprintTitle: "Yojana 2",
-        parent_id: null,
-        type: "container",
-        tasks: [
-          {
-            id: 3,
-            taskTitle: "Change Password",
-            width: 3,
-            type: "text",
-            parent_id: 2
-          },
-          {
-            id: 4,
-            taskTitle: "Auth Login",
-            width: 3,
-            type: "text",
-            parent_id: 2
-          }
-        ]
-      },
-    ]);
-
-    return (
-      <div className='w-full'>
-        <AdminLayout>
-        <div className='flex flex-col items-end gap-5 p-5 h-full'>
-          <Button>Create sprint</Button>
-        </div>
-        <ReactSortable list={sprintLists} setList={setSprintLists} {...sortableOptions}>
-          {sprintLists.map((sprintListItem, sprintListId) => (
-            <BlockWrapper
-            sprintListId={sprintListId}
-            sprintListItem={sprintListItem}
-              sprintIndex={[sprintListId]}
-              setSprintLists={setSprintLists}
-            />
+          {sprintsList?.map((sprintItem, sprintId) => (
+            <div
+              key={sprintItem.id}
+              className="p-4 m-4 bg-gray-200 flex flex-col items-start gap-1"
+            >
+              {sprintItem.sprintName}
+              <ReactSortable
+                className="w-full"
+                list={sprintItem.tasks}
+                setList={(currentList) => {
+                  setSprintsList((currentSprintList) => {
+                    const newList = [...currentSprintList];
+                    newList[sprintId].tasks = currentList;
+                    return newList;
+                  });
+                }}
+                {...sortableOptions}
+              >
+                {sprintItem?.tasks.length > 0 ? (
+                  sprintItem.tasks.map((taskItem, taskId) => {
+                    return (
+                      <div key={taskId} className="p-4 m-2 bg-white">
+                        {taskItem.sprintName}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="w-full py-2 text-center border border-gray-500 border-dashed">
+                    <p>
+                      Plan a sprint by dragging a issue or by creating new one
+                    </p>
+                  </div>
+                )}
+                <div className="w-full relative">
+                  <Button
+                    onClick={() => handleActiveForm(sprintId)}
+                    className="w-full text-start hover:bg-gray-200 px-1 py-2 flex justify-start rounded-none"
+                  >
+                    + Create issue
+                  </Button>
+                  <div
+                    className={`${activeForm === sprintId ? "flex" : "hidden"
+                      } absolute w-full h-full inset-0 bg-white border border-blue-600 items-center gap-3 px-2`}
+                  >
+                    <select name="" id="" className="focus:outline-none">
+                      <option value="feature">Feature</option>
+                      <option value="bug">Bug</option>
+                    </select>
+                    <input
+                      ref={inputRef}
+                      id={[sprintId, "*" + JSON.stringify({ sprintsList })]}
+                      mapping="test"
+                      type="text"
+                      placeholder="Enter issue title?"
+                      className="w-full focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </ReactSortable>
+            </div>
           ))}
         </ReactSortable>
-        </AdminLayout>
       </div>
-    );
-  }
- 
+    </AdminLayout>
+  );
+}
+
 
 export default Tasks
