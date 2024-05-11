@@ -1,5 +1,5 @@
 "use client"
-import AdminLayout from '@/app/components/adminLayout/page'
+import AdminLayout from '@/app/components/adminLayout/page';
 import { Button } from '@nextui-org/react'
 import React, { useRef, useState } from 'react'
 import { ReactSortable } from "react-sortablejs";
@@ -31,6 +31,27 @@ const Tasks = () => {
     setSprintsList(existingSprintsList);
   }
 
+  document.body.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && inputRef.current.value) {
+      const currentSprint = parseInt(inputRef.current.id.split("*")[0]);
+      const tempSprintsList = JSON.parse(
+        inputRef.current.id.split("*")[1]
+      ).sprintsList;
+
+      if (
+        tempSprintsList[currentSprint]?.tasks[
+          tempSprintsList[currentSprint].tasks.length - 1
+        ]?.sprintName !== inputRef.current.value
+      ) {
+        tempSprintsList[currentSprint].tasks.push({
+          sprintName: inputRef.current.value,
+          id: tempSprintsList[currentSprint].tasks.length + 1,
+        });
+        setSprintsList(tempSprintsList);
+        inputRef.current.value = "";
+      }
+    }
+  });
   return (
     <AdminLayout>
       <div className="flex flex-col items-end gap-4">

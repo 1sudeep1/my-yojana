@@ -31,4 +31,12 @@ const getAllProjects = async (req, res) => {
     }
 }
 
-module.exports = {addNewProjects, getAllProjects}
+const getAllMembersByProjectId = async (req, res) => {
+    console.log(req.params.projectId)
+    const projectList = await Project.findById(req.params.projectId)
+      .select("members")
+      .populate("members");
+    return res.json({ projectList, msg:'members fetched successfully'});
+  };
+
+module.exports = {addNewProjects, getAllProjects, getAllMembersByProjectId}
